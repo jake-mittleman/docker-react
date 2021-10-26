@@ -9,3 +9,33 @@ before_install:
 
 script:
   - docker run -e CI=true jmittleman/docker-react npm run test
+
+deploy:
+  # this is kind of a configuration keyword that travis.ci understands
+  # so that it'll use AWS' elasticbeanstalk
+  provider: elasticbeanstalk
+
+  # This is the region of your application (you can set this in AWS but it
+  # must match AWS, it can't be whatever you want it to be)
+  region: "us-east-2"
+
+  # These are the app and env names from AWS. These are set-up when setting up
+  # the application
+  app: "docker-web"
+  env: "Dockerweb-env"
+
+  # These are found by going to the s3 service and finding the correct bucket.
+  bucket_name: "elasticbeanstalk-us-east-2-829475484955"
+
+  # Usually you'll have a folder, but before your first deploy, you can specify
+  # exactly the same bucket_path as your app name.
+  # NOTE: my bucket_path and app match
+  bucket_path: "docker-web"
+  on:
+    branch: master
+
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: "$AWS_SECRET_KEY"
+
+
